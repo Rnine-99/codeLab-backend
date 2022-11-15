@@ -3,11 +3,20 @@ from urllib.request import Request
 
 
 # get the results by owner and repo_name
-def crawl_owner_repo_name(headers, owner, repo_name):
+def crawl_owner_repo_name(owner, repo_name):
+    with open('../secrets.yaml', 'r') as f:
+        SECRETS = yaml.safe_load(f)
+    secret_key = SECRETS['AUTHORIZATION_CODE']
+    headers = {'User-Agent': 'Mozilla/5.0',
+               'Authorization': secret_key,
+               'Content-Type': 'application/json',
+               'Accept': 'application/json'
+               }
     url = 'https://api.github.com/repos/{owner}/{repo_name}'.format(owner=owner, repo_name=repo_name)
     req = Request(url, headers=headers)
     response = urlopen(req).read()
     result = json.loads(response.decode())
+
     return result
 
 
