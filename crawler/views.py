@@ -1,13 +1,16 @@
 from django.shortcuts import render
 import json
 
+from django.views.decorators.csrf import csrf_exempt
+
+from crawler.demoSpider import crawl_owner_repo_name
 from crawler.serializer import serializers_repo
-from demoSpider import crawl_owner_repo_name, crawl_language
 import yaml
-from models import Repo
+from crawler.models import Repo
 from django.http import JsonResponse
 
 
+@csrf_exempt
 def get_info_repo_name(request):
     owner = request.POST.get('owner')
     repo_name = request.POST.get('repo_name')
@@ -22,8 +25,10 @@ def get_info_repo_name(request):
                         git_url=results['git_url'],
                         clone_url=results['clone_url'],
                         ssh_url=results['ssh_url'])
+    return JsonResponse({'success': True})
 
 
+@csrf_exempt
 def search_reponame(request):
     repo_name = request.POST.get('repo_name')
     repo_founds = Repo.objects.filter(repo_name=repo_name)
@@ -37,5 +42,3 @@ def search_reponame(request):
         return JsonResponse({
             'success': False
         })
-
-

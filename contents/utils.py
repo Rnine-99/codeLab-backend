@@ -6,7 +6,7 @@ import yaml
 
 
 def crawl_owner_repo_root_dir(owner, repo_name):
-    with open('../secrets.yaml', 'r') as f:
+    with open('./secrets.yaml', 'r') as f:
         SECRETS = yaml.safe_load(f)
     secret_key = SECRETS['AUTHORIZATION_CODE']
     headers = {'User-Agent': 'Mozilla/5.0',
