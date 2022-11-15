@@ -1,5 +1,7 @@
 from django.shortcuts import render
 import json
+
+from crawler.serializer import serializers_repo
 from demoSpider import crawl_owner_repo_name, crawl_language
 import yaml
 from models import Repo
@@ -25,22 +27,8 @@ def get_info_repo_name(request, owner, repo_name):
 def search_reponame(request):
     repo_name = request.POST.get('repo_name')
     repo_founds = Repo.objects.filter(repo_name=repo_name)
-    list_repo = []
+    list_repo = serializers_repo(repo_founds, many=True).data
     if repo_founds:
-        for repo in repo_founds:
-            list_repo.append({
-                'owner': repo.owner,
-                'repo_name': repo.repo_name,
-                'description': repo.description,
-                'stargazers_count': repo.stargazers_count,
-                'forks_count': repo.forks_count,
-                'open_issues_count': repo.open_issues_count,
-                'subscribers_count': repo.subscribers_count,
-                'git_url': repo.git_url,
-                'clone_url': repo.clone_url,
-                'ssh_url': repo.ssh_url,
-                'root_dir': repo.root_dir
-            })
         return JsonResponse({
             'success': True,
             'data': list_repo
