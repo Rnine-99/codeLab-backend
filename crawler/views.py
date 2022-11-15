@@ -8,9 +8,9 @@ from models import Repo
 from django.http import JsonResponse
 
 
-def get_info_repo_name(request, owner, repo_name):
-    # owner = 'vuejs'
-    # repo_name = 'vue'
+def get_info_repo_name(request):
+    owner = request.POST.get('owner')
+    repo_name = request.POST.get('repo_name')
     results = crawl_owner_repo_name(owner, repo_name)
     Repo.objects.create(owner=owner,
                         repo_name=repo_name,
