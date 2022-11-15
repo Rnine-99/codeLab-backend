@@ -5,7 +5,7 @@ from django.db import models
 class Repo(models.Model):
     owner = models.CharField(max_length=100)
     repo_name = models.CharField(max_length=100)
-    description = models.CharField(max_length=100)
+    description = models.CharField(max_length=1024)
     stargazers_count = models.IntegerField()
     forks_count = models.IntegerField()
     open_issues_count = models.IntegerField()
