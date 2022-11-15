@@ -3,6 +3,7 @@ import json
 
 from django.views.decorators.csrf import csrf_exempt
 
+from contents.utils import crawl_owner_repo_root_dir
 from crawler.demoSpider import crawl_owner_repo_name
 from crawler.serializer import serializers_repo
 import yaml
@@ -24,7 +25,8 @@ def get_info_repo_name(request):
                         subscribers_count=results['subscribers_count'],
                         git_url=results['git_url'],
                         clone_url=results['clone_url'],
-                        ssh_url=results['ssh_url'])
+                        ssh_url=results['ssh_url'],
+                        root_dir=crawl_owner_repo_root_dir(owner, repo_name))
     return JsonResponse({'success': True})
 
 

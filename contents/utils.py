@@ -17,5 +17,5 @@ def crawl_owner_repo_root_dir(owner, repo_name):
     url = 'https://api.github.com/repos/{owner}/{repo_name}/contents'.format(owner=owner, repo_name=repo_name)
     req = Request(url, headers=headers)
     response = urlopen(req).read()
-    result = json.loads(response.decode())
+    result = response.decode()
     return result
