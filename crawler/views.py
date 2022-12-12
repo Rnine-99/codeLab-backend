@@ -27,7 +27,10 @@ def get_info_repo_name(request):
                         git_url=results['git_url'],
                         clone_url=results['clone_url'],
                         ssh_url=results['ssh_url'],
-                        root_dir=crawl_owner_repo_root_dir(owner, repo_name))
+                        root_dir=crawl_owner_repo_root_dir(owner, repo_name),
+                        update_time=results['updated_at']
+                        )
+
     return JsonResponse({'success': True})
 
 
