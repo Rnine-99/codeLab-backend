@@ -50,8 +50,10 @@ def get_issue_detail(request):
     issue_id = request.POST.get('issue_id')
     program_id = request.POST.get('program_id')
     program = Repo.objects.get(id=program_id)
-    issue = crawl_issue_detail(program.owner, program.repo_name, issue_id)
-    return JsonResponse({'issue': issue})
+    issue = json.loads(crawl_issue_detail(program.owner, program.repo_name, issue_id))
+    return JsonResponse({'author': issue['user']['login'],
+                         'content': issue['body'],
+                         'time': issue['created_at']})
 
 
 @csrf_exempt
@@ -62,7 +64,9 @@ def get_pr_detail(request):
     program_id = request.POST.get('program_id')
     program = Repo.objects.get(id=program_id)
     pr = crawl_pr_detail(program.owner, program.repo_name, pr_id)
-    return JsonResponse({'pr': pr})
+    return JsonResponse({'author': pr['user']['login'],
+                         'content': pr['body'],
+                         'time': pr['created_at']})
 
 
 @csrf_exempt
