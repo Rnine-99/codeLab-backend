@@ -16,6 +16,7 @@ class Repo(models.Model):
     https_url = models.CharField(max_length=100)
     root_dir = models.TextField(verbose_name="根目录")
     update_time = models.DateTimeField(auto_now=True)
+    language = models.CharField(max_length=100)
 
     def __str__(self):
         return self.full_name
