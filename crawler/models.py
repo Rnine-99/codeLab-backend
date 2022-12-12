@@ -13,7 +13,12 @@ class Repo(models.Model):
     git_url = models.CharField(max_length=100)
     clone_url = models.CharField(max_length=100)
     ssh_url = models.CharField(max_length=100)
+    https_url = models.CharField(max_length=100)
     root_dir = models.TextField(verbose_name="根目录")
+    contribute_list = models.TextField(verbose_name="贡献者列表")
+    issue_list = models.TextField(verbose_name="issue列表")
+    pr_list = models.TextField(verbose_name="pr列表")
+    update_time = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return self.full_name
