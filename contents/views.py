@@ -6,7 +6,7 @@ from django.views.decorators.csrf import csrf_exempt
 
 from contents.models import RepoIssue, RepoPr
 from contents.serializer import serializers_issue, serializers_pr
-from contents.utils import crawl_issue_by_id, crawl_issue_detail
+from contents.utils import crawl_issue_by_id, crawl_issue_detail, crawl_new_issue_or_pr
 from crawler.models import Repo
 
 
@@ -53,4 +53,14 @@ def get_issue_detail(request):
     program_id = request.POST.get('program_id')
     program = Repo.objects.get(id=program_id)
     issue = crawl_issue_detail(program.owner, program.repo_name, issue_id)
+    return JsonResponse({'issue': issue})
 
+
+@csrf_exempt
+def get_issue(request):
+    if request.method != "POST":
+        return JsonResponse({'success': False, 'msg': "请求方式错误"})
+    repo_id = request.POST.get('repo_id')
+    program = Repo.objects.get(id=repo_id)
+    crawl_new_issue_or_pr(program)
+    return JsonResponse({'success': True})
