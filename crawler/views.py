@@ -55,7 +55,7 @@ def search_reponame(request):
 def get_detail_by_id(request):
     id = request.POST.get('program_id')
     repo = Repo.objects.get(id=id)
-    return JsonResponse({'success': True, 'repo': serializers_repo(repo).data})
+    return JsonResponse({'success': True, 'info': serializers_repo(repo).data})
 
 
 @csrf_exempt
@@ -63,5 +63,5 @@ def get_program_by_name(request):
     repo_name = request.POST.get('name')
     # search for repo_name like name
     repo = Repo.objects.filter(repo_name__contains=repo_name)
-    return JsonResponse({'success': True, 'repo': serializers_repo(repo, many=True).data})
+    return JsonResponse({'success': True, 'info': serializers_repo(repo, many=True).data})
 
