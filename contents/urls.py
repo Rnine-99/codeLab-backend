@@ -5,7 +5,9 @@ from contents.views import *
 
 urlpatterns = [
     path('get_root_dir', get_root_dir),
-    path('get_issue_list_by_id', get_issue_list_by_id),
+    path('getIssueListById', get_issue_list_by_repo_id),
+    path('getPrListById', get_pr_list_by_repo_id),
     path('get_issue', get_issue),
-    path('get_issue/detail', get_issue_detail),
+    path('getIssueById', get_issue_detail),
+    path('getPrById', get_issue_detail),
 ]

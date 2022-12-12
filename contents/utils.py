@@ -59,6 +59,23 @@ def crawl_issue_detail(owner, repo_name, issue):
     return result
 
 
+def crawl_pr_detail(owner, repo_name, pr):
+    with open('./secrets.yaml', 'r') as f:
+        SECRETS = yaml.safe_load(f)
+    secret_key = SECRETS['AUTHORIZATION_CODE']
+    headers = {'User-Agent': 'Mozilla/5.0',
+               'Authorization': secret_key,
+               'Content-Type': 'application/json',
+               'Accept': 'application/json'
+               }
+    url = 'https://api.github.com/repos/{owner}/{repo_name}/pulls/{id}'. \
+        format(owner=owner, repo_name=repo_name, id=pr)
+    # print(url)
+    req = Request(url, headers=headers)
+    response = urlopen(req).read()
+    result = response.decode()
+    return result
+
 # 传入项目模型
 def crawl_new_issue_or_pr(program):
     a = json.loads(crawl_issue_by_id(program.owner, program.repo_name))

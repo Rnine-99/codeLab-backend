@@ -6,7 +6,7 @@ from django.views.decorators.csrf import csrf_exempt
 
 from contents.models import RepoIssue, RepoPr
 from contents.serializer import serializers_issue, serializers_pr
-from contents.utils import crawl_issue_by_id, crawl_issue_detail, crawl_new_issue_or_pr
+from contents.utils import *
 from crawler.models import Repo
 
 
@@ -22,27 +22,25 @@ def get_root_dir(request):
 
 
 @csrf_exempt
-def get_issue_list_by_id(request):
+def get_issue_list_by_repo_id(request):
     if request.method != "POST":
         return JsonResponse({'success': False, 'msg': "请求方式错误"})
     program_id = request.POST.get('program_id')
-    page = request.POST.get('page')
-    issue = RepoIssue.objects.filter(repo_id=program_id).order_by('-issue_id')[(page - 1) * 10:page * 10]
+    issue = RepoIssue.objects.filter(repo_id=program_id).order_by('-issue_id')
     return JsonResponse({'success': True,
                          'issueNum': RepoIssue.objects.filter(repo_id=program_id).count(),
                          'issueList': serializers_issue(issue, many=True).data})
 
 
 @csrf_exempt
-def get_pr_list_by_id(request):
+def get_pr_list_by_repo_id(request):
     if request.method != "POST":
         return JsonResponse({'success': False, 'msg': "请求方式错误"})
     program_id = request.POST.get('program_id')
-    page = request.POST.get('page')
-    pr = RepoPr.objects.filter(repo_id=program_id).order_by('-pr_id')[(page - 1) * 10:page * 10]
+    pr = RepoPr.objects.filter(repo_id=program_id).order_by('-pr_id')
     return JsonResponse({'success': True,
-                         'issueNum': RepoPr.objects.filter(repo_id=program_id).count(),
-                         'issueList': serializers_pr(pr, many=True).data})
+                         'prNum': RepoPr.objects.filter(repo_id=program_id).count(),
+                         'prList': serializers_pr(pr, many=True).data})
 
 
 @csrf_exempt
@@ -54,6 +52,17 @@ def get_issue_detail(request):
     program = Repo.objects.get(id=program_id)
     issue = crawl_issue_detail(program.owner, program.repo_name, issue_id)
     return JsonResponse({'issue': issue})
+
+
+@csrf_exempt
+def get_pr_detail(request):
+    if request.method != "POST":
+        return JsonResponse({'success': False, 'msg': "请求方式错误"})
+    pr_id = request.POST.get('pr_id')
+    program_id = request.POST.get('program_id')
+    program = Repo.objects.get(id=program_id)
+    pr = crawl_pr_detail(program.owner, program.repo_name, pr_id)
+    return JsonResponse({'pr': pr})
 
 
 @csrf_exempt
