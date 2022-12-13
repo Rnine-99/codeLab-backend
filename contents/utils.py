@@ -28,7 +28,7 @@ def crawl_issue_by_id(owner, repo_name):
         SECRETS = yaml.safe_load(f)
     secret_key = SECRETS['AUTHORIZATION_CODE']
     headers = {'User-Agent': 'Mozilla/5.0',
-               'Authorization': secret_key,
+               'Authorization': "token "+secret_key,
                'Content-Type': 'application/json',
                'Accept': 'application/json'
                }
@@ -46,7 +46,7 @@ def crawl_issue_detail(owner, repo_name, issue):
         SECRETS = yaml.safe_load(f)
     secret_key = SECRETS['AUTHORIZATION_CODE']
     headers = {'User-Agent': 'Mozilla/5.0',
-               'Authorization': secret_key,
+               'Authorization': "token "+ secret_key,
                'Content-Type': 'application/json',
                'Accept': 'application/json'
                }
@@ -64,7 +64,7 @@ def crawl_pr_detail(owner, repo_name, pr):
         SECRETS = yaml.safe_load(f)
     secret_key = SECRETS['AUTHORIZATION_CODE']
     headers = {'User-Agent': 'Mozilla/5.0',
-               'Authorization': secret_key,
+               'Authorization': "token "+secret_key,
                'Content-Type': 'application/json',
                'Accept': 'application/json'
                }
