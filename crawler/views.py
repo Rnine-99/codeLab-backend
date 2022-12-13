@@ -73,6 +73,6 @@ def get_detail_by_id(request):
 def get_program_by_name(request):
     repo_name = request.POST.get('name')
     # search for repo_name like name
-    repo = Repo.objects.filter(repo_name__contains=repo_name)
+    repo = Repo.objects.filter(repo_name__icontains=repo_name)
     return JsonResponse({'success': True, 'info': serializers_repo(repo, many=True).data})
 
