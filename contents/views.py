@@ -50,10 +50,17 @@ def get_issue_detail(request):
     issue_id = request.POST.get('issue_id')
     program_id = request.POST.get('program_id')
     program = Repo.objects.get(id=program_id)
+    comments = []
     issue = json.loads(crawl_issue_detail(program.owner, program.repo_name, issue_id))
+    comment = json.loads(crawl_issue_comment(program.owner, program.repo_name, issue_id))
+    for i in comment:
+        comments.append({'author': i['user']['login'],
+                         'content': i['body'],
+                         'time': i['created_at']})
     return JsonResponse({'author': issue['user']['login'],
                          'content': issue['body'],
-                         'time': issue['created_at']})
+                         'time': issue['created_at'],
+                         'comments': comments})
 
 
 @csrf_exempt
@@ -64,9 +71,16 @@ def get_pr_detail(request):
     program_id = request.POST.get('program_id')
     program = Repo.objects.get(id=program_id)
     pr = crawl_pr_detail(program.owner, program.repo_name, pr_id)
+    comments = []
+    comment = json.loads(crawl_pr_comment(program.owner, program.repo_name, pr_id))
+    for i in comment:
+        comments.append({'author': i['user']['login'],
+                         'content': i['body'],
+                         'time': i['created_at']})
     return JsonResponse({'author': pr['user']['login'],
                          'content': pr['body'],
-                         'time': pr['created_at']})
+                         'time': pr['created_at'],
+                         'comments': comments})
 
 
 @csrf_exempt
