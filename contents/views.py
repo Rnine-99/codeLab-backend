@@ -59,6 +59,7 @@ def get_issue_detail(request):
                          'time': i['created_at']})
     return JsonResponse({'author': issue['user']['login'],
                          'content': issue['body'],
+                         'title': issue['title'],
                          'time': issue['created_at'],
                          'comments': comments})
 
@@ -79,6 +80,7 @@ def get_pr_detail(request):
                          'time': i['created_at']})
     return JsonResponse({'author': pr['user']['login'],
                          'content': pr['body'],
+                         'title': pr['title'],
                          'time': pr['created_at'],
                          'comments': comments})
 
