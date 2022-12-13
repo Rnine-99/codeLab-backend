@@ -12,7 +12,7 @@ def crawl_owner_repo_root_dir(owner, repo_name):
         SECRETS = yaml.safe_load(f)
     secret_key = SECRETS['AUTHORIZATION_CODE']
     headers = {'User-Agent': 'Mozilla/5.0',
-               'Authorization': "token "+ secret_key,
+               'Authorization': secret_key,
                'Content-Type': 'application/json',
                'Accept': 'application/json'
                }
@@ -28,7 +28,7 @@ def crawl_issue_by_id(owner, repo_name):
         SECRETS = yaml.safe_load(f)
     secret_key = SECRETS['AUTHORIZATION_CODE']
     headers = {'User-Agent': 'Mozilla/5.0',
-               'Authorization': "token "+secret_key,
+               'Authorization': "token " + secret_key,
                'Content-Type': 'application/json',
                'Accept': 'application/json'
                }
@@ -46,7 +46,7 @@ def crawl_issue_detail(owner, repo_name, issue):
         SECRETS = yaml.safe_load(f)
     secret_key = SECRETS['AUTHORIZATION_CODE']
     headers = {'User-Agent': 'Mozilla/5.0',
-               'Authorization': "token "+ secret_key,
+               'Authorization': "token " + secret_key,
                'Content-Type': 'application/json',
                'Accept': 'application/json'
                }
@@ -64,13 +64,13 @@ def crawl_pr_detail(owner, repo_name, pr):
         SECRETS = yaml.safe_load(f)
     secret_key = SECRETS['AUTHORIZATION_CODE']
     headers = {'User-Agent': 'Mozilla/5.0',
-               'Authorization': "token "+secret_key,
+               'Authorization': "token " + secret_key,
                'Content-Type': 'application/json',
                'Accept': 'application/json'
                }
     url = 'https://api.github.com/repos/{owner}/{repo_name}/pulls/{id}'. \
         format(owner=owner, repo_name=repo_name, id=pr)
-    # print(url)
+    print(url)
     req = Request(url, headers=headers)
     response = urlopen(req).read()
     result = response.decode()
@@ -82,7 +82,7 @@ def crawl_pr_comment(owner, repo_name, pr):
         SECRETS = yaml.safe_load(f)
     secret_key = SECRETS['AUTHORIZATION_CODE']
     headers = {'User-Agent': 'Mozilla/5.0',
-               'Authorization': "token "+ secret_key,
+               'Authorization': "token " + secret_key,
                'Content-Type': 'application/json',
                'Accept': 'application/json'
                }
@@ -100,7 +100,7 @@ def crawl_issue_comment(owner, repo_name, pr):
         SECRETS = yaml.safe_load(f)
     secret_key = SECRETS['AUTHORIZATION_CODE']
     headers = {'User-Agent': 'Mozilla/5.0',
-               'Authorization': "token "+ secret_key,
+               'Authorization': "token " + secret_key,
                'Content-Type': 'application/json',
                'Accept': 'application/json'
                }
@@ -112,15 +112,19 @@ def crawl_issue_comment(owner, repo_name, pr):
     result = response.decode()
     return result
 
+
 # 传入项目模型
 def crawl_new_issue_or_pr(program):
-    a = json.loads(crawl_issue_by_id(program.owner, program.repo_name))
-    issue_biggest_id = a[0]['number']
+    try:
+        a = json.loads(crawl_issue_by_id(program.owner, program.repo_name))
+        issue_biggest_id = a[0]['number']
+    except:
+        issue_biggest_id = 500
     try:
         issue_biggest = RepoIssue.objects.filter(repo_id=program.id).order_by('-issue_id').first().issue_id
     except:
         issue_biggest = 0
-    page = 52
+    page = issue_biggest_id
     while page > 0:
         try:
             issue = json.loads(crawl_issue_detail(program.owner, program.repo_name, page))
