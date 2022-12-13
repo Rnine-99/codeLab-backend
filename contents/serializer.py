@@ -6,13 +6,13 @@ from contents.models import *
 class serializers_issue(serializers.ModelSerializer):
     class Meta:
         model = RepoIssue
-        fields = ['id', 'title']
+        fields = ['pr_id', 'title']
 
 
 class serializers_pr(serializers.ModelSerializer):
     class Meta:
         model = RepoPr
-        fields = ['id', 'title']
+        fields = ['pr_id', 'title']
 
 
 class serializers_contributers(serializers.ModelSerializer):
