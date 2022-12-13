@@ -4,7 +4,7 @@ from django.http import JsonResponse
 from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
 
-from contents.models import RepoIssue, RepoPr
+from contents.models import RepoIssue, RepoPr, RepoContributers
 from contents.serializer import serializers_issue, serializers_pr
 from contents.utils import *
 from crawler.models import Repo
@@ -100,9 +100,9 @@ def crawl_contributor(request):
         return JsonResponse({'success': False, 'msg': "请求方式错误"})
     repo_id = request.POST.get('repo_id')
     program = Repo.objects.get(id=repo_id)
-    results = crawl_contributor(program.owner, program.repo_name)
+    results = crawl_new_contributor(program.owner, program.repo_name)
     # save to db
     for result in results:
-        Contributor.objects.create(repo_id=repo_id, contributor_id=result['id'], contributor_name=result['login'],\
-                                      contributor_html_url=result['html_url'], contributor_type=result['type'], contributor_contributions=result['contributions'])
+        RepoContributers.objects.create(repo_id=repo_id, contributer_id=result['id'], contributer_name=result['login'],\
+                                      contributer_html_url=result['html_url'], contributer_type=result['type'], contributer_contributions=result['contributions'])
     return JsonResponse({'success': True})

@@ -113,10 +113,10 @@ def crawl_issue_comment(owner, repo_name, pr):
     return result
 
 
-def crawl_contributor(owner, repo_name):
+def crawl_new_contributor(owner, repo_name):
     with open('./secrets.yaml', 'r') as f:
         SECRETS = yaml.safe_load(f)
-    secret_key = SECRET['AUTHORIZATION_CODE']
+    secret_key = SECRETS['AUTHORIZATION_CODE']
     headers = {'User-Agent': 'Mozilla/5.0',
                 'Authorization': "token " + secret_key,
                 'Content-Type': 'application/json',
@@ -127,7 +127,7 @@ def crawl_contributor(owner, repo_name):
     # print(url)
     req = Request(url, headers=headers)
     response = urlopen(req).read()
-    result = response.decode()
+    result = json.loads(response.decode())
     return result
 
 
