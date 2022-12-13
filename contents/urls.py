@@ -9,5 +9,5 @@ urlpatterns = [
     path('getPrListById', get_pr_list_by_repo_id),
     path('get_issue', get_issue),
     path('getIssueById', get_issue_detail),
-    path('getPrById', get_issue_detail),
+    path('getPrById', get_pr_detail),
 ]

@@ -70,7 +70,7 @@ def get_pr_detail(request):
     pr_id = request.POST.get('pr_id')
     program_id = request.POST.get('program_id')
     program = Repo.objects.get(id=program_id)
-    pr = crawl_pr_detail(program.owner, program.repo_name, pr_id)
+    pr = json.loads(crawl_pr_detail(program.owner, program.repo_name, pr_id))
     comments = []
     comment = json.loads(crawl_pr_comment(program.owner, program.repo_name, pr_id))
     for i in comment:
