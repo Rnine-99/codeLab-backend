@@ -8,6 +8,8 @@ from crawler.demoSpider import crawl_owner_repo_name
 from crawler.serializer import serializers_repo
 import yaml
 from crawler.models import Repo
+from contents.models import RepoIssue, RepoPr
+from contents.serializer import serializers_issue, serializers_pr
 from django.http import JsonResponse
 
 
@@ -43,7 +45,7 @@ def search_reponame(request):
     if repo_founds:
         return JsonResponse({
             'success': True,
-            'data': list_repo
+            'info': list_repo,
         })
     else:
         return JsonResponse({
@@ -55,7 +57,14 @@ def search_reponame(request):
 def get_detail_by_id(request):
     id = request.POST.get('program_id')
     repo = Repo.objects.get(id=id)
-    return JsonResponse({'success': True, 'info': serializers_repo(repo).data})
+    issue_list = RepoIssue.objects.filter(repo_id=id).order_by('-issue_id')[0:6]
+    pr_list = RepoPr.objects.filter(repo_id=id).order_by('-pr_id')[0:6]
+    return JsonResponse({
+        'success': True,
+        'info': serializers_repo(repo).data,
+        'issue_list': serializers_issue(issue_list, many=True).data,
+        'pr_list': serializers_pr(pr_list, many=True).data,
+    })
 
 
 @csrf_exempt
