@@ -93,3 +93,16 @@ def get_issue(request):
     program = Repo.objects.get(id=repo_id)
     crawl_new_issue_or_pr(program)
     return JsonResponse({'success': True})
+
+@csrf_exempt
+def crawl_contributor(request):
+    if request.method != "POST":
+        return JsonResponse({'success': False, 'msg': "请求方式错误"})
+    repo_id = request.POST.get('repo_id')
+    program = Repo.objects.get(id=repo_id)
+    results = crawl_contributor(program.owner, program.repo_name)
+    # save to db
+    for result in results:
+        Contributor.objects.create(repo_id=repo_id, contributor_id=result['id'], contributor_name=result['login'],\
+                                      contributor_html_url=result['html_url'], contributor_type=result['type'], contributor_contributions=result['contributions'])
+    return JsonResponse({'success': True})

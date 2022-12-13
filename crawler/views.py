@@ -8,8 +8,8 @@ from crawler.demoSpider import crawl_owner_repo_name
 from crawler.serializer import serializers_repo
 import yaml
 from crawler.models import Repo
-from contents.models import RepoIssue, RepoPr
-from contents.serializer import serializers_issue, serializers_pr
+from contents.models import RepoIssue, RepoPr, RepoContributers
+from contents.serializer import serializers_issue, serializers_pr, serializers_contributers
 from django.http import JsonResponse
 
 
@@ -59,11 +59,13 @@ def get_detail_by_id(request):
     repo = Repo.objects.get(id=id)
     issue_list = RepoIssue.objects.filter(repo_id=id).order_by('-issue_id')[0:6]
     pr_list = RepoPr.objects.filter(repo_id=id).order_by('-pr_id')[0:6]
+    contributor_list = RepoContributers.objects.filter(repo_id=id)
     return JsonResponse({
         'success': True,
         'info': serializers_repo(repo).data,
         'issue_list': serializers_issue(issue_list, many=True).data,
         'pr_list': serializers_pr(pr_list, many=True).data,
+        'contributor_list': serializers_contributers(contributor_list, many=True).data,
     })
 
 

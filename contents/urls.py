@@ -10,4 +10,5 @@ urlpatterns = [
     path('get_issue', get_issue),
     path('getIssueById', get_issue_detail),
     path('getPrById', get_pr_detail),
+    path('crawlContributor', crawl_contributor),
 ]

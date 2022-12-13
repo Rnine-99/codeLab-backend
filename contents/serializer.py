@@ -13,3 +13,9 @@ class serializers_pr(serializers.ModelSerializer):
     class Meta:
         model = RepoPr
         fields = ['id', 'title']
+
+
+class serializers_contributers(serializers.ModelSerializer):
+    class Meta:
+        model = RepoContributers
+        fields = ['id', 'contributer_name', 'contributer_html_url', 'contributer_type', 'contributer_contributions']

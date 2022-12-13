@@ -113,6 +113,25 @@ def crawl_issue_comment(owner, repo_name, pr):
     return result
 
 
+def crawl_contributor(owner, repo_name):
+    with open('./secrets.yaml', 'r') as f:
+        SECRETS = yaml.safe_load(f)
+    secret_key = SECRET['AUTHORIZATION_CODE']
+    headers = {'User-Agent': 'Mozilla/5.0',
+                'Authorization': "token " + secret_key,
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+                }
+    url = 'https://api.github.com/repos/{owner}/{repo_name}/contributors'. \
+        format(owner=owner, repo_name=repo_name)
+    # print(url)
+    req = Request(url, headers=headers)
+    response = urlopen(req).read()
+    result = response.decode()
+    return result
+
+
+
 # 传入项目模型
 def crawl_new_issue_or_pr(program):
     try:
