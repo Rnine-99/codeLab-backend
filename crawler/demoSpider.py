@@ -10,7 +10,7 @@ def crawl_owner_repo_name(owner, repo_name):
     with open('./secrets.yaml', 'r') as f:
         SECRETS = yaml.safe_load(f)
     secret_key = SECRETS['AUTHORIZATION_CODE']
-    headers = {'User-Agent': 'Mozilla/5.0',
+    headers = {'User-Agent': 'Mozilla/5.0 3578.98 Safari/537.36',
                'Authorization': secret_key,
                'Content-Type': 'application/json',
                'Accept': 'application/json'
